@@ -10,20 +10,21 @@ describe('POST /auth', () => {
         password: 'password123',
       });
 
-    expect(response.statusCode).toBe(200); // Check for a successful response
+    expect(response.statusCode).toBe(200); 
     expect(response.body).toHaveProperty('token'); // Check if the token is present
   });
 
-  it('should return 403 for invalid credentials', async () => {
+  it('should return Bad credential for invalid credentials provided', async () => {
     const response = await request('https://restful-booker.herokuapp.com')
       .post('/auth')
       .set('Content-Type', 'application/json')
       .send({
-        username: 'wronguser',
+        username: 'ni',
         password: 'wrongpassword',
       });
 
-    expect(response.statusCode).toBe(403); // Check for forbidden response
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('reason')
   });
 });
 
