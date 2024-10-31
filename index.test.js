@@ -114,16 +114,47 @@ describe('POST /booking',() =>{
       },
       "additionalneeds": "Dinner"
     })
-    //.set('Content-Type','application/json');
     expect(res.statusCode).toBe(201);
-    //expect(res.body).toHaveProperty('bookingid')
-    //expect(res.body).toHaveProperty('booking')
   });
   it('should return 500 for invalid data',async () => {
     const res = await request(BASE_URL)
     .post('/booking')
     .send("data")
     expect(res.statusCode).toBe(500);
+  });
+});
+
+
+describe('DELETE /booking/:id',() => {
+  it('should delete an existing booking and return 201',async () => {
+    const res = await request(BASE_URL)
+    .delete(`/booking/1`)
+    .set('Content-Type','application/json')
+    .set('Authorization','Basic YWRtaW46cGFzc3dvcmQxMjM=');
+    expect(res.statusCode).toBe(201)
+  });
+
+  it('should not delete a booking with an invalid booking id',async () => {
+    const res = await request(BASE_URL)
+    .delete(`/booking/2323232323232`)
+    .set('Content-Type','application/json')
+    .set('Authorization','Basic YWRtaW46cGFzc3dvcmQxMjM=');
+    expect(res.statusCode).toBe(405)
+  });
+
+  it('should not delete a booking with an invalid authorization and a valid booking id',async () => {
+    const res = await  request(BASE_URL)
+    .delete(`/booking/1`)
+    .set('Content-Type','application/json')
+    .set('Authorization','Basic Test34');
+    expect(res.statusCode).toBe(403)
+  });
+  it('should not delete a booking with an invalid authorization and an invalid booking id',async () => {
+    const res = await request(BASE_URL)
+    .delete(`/booking/21134444`)
+    .set('Content-Type','application/json')
+    .set('Authorization','Basic Test23')
+    expect(res.statusCode).toBe(403)
   });
 });
 
