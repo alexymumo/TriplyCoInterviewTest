@@ -5,11 +5,23 @@
   "scripts": {
     "test": "jest"
   },
+  "jest":{
+    "reporters":[
+      "default",[
+        "./node_modules/jest-html-reporter",{
+          "pageTitle": "Restful-booker API report",
+          "outputPath": "reports/test-report.html",
+          "includeFailureMsg":true
+        }
+      ]
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "jest": "^29.7.0",
+    "jest-html-reporter": "^3.10.2",
     "supertest": "^7.0.0"
   },
   "directories": {
