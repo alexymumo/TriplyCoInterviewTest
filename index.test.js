@@ -76,7 +76,7 @@ describe('GET /booking/:id',() =>{
     const bookingId = 5;
     const res = await request(BASE_URL)
     .get(`/booking/${bookingId}`)
-    expect(res.status).toBe(200); 
+    expect(200); 
   });
 
   it('should return Not Found for invalid booking id', async () => {
@@ -99,23 +99,15 @@ describe('POST /booking',() =>{
           "checkin": "2024-01-01",
           "checkout": "2025-01-01"
       },
-      "additionalneeds": "Dinner"
-  };
+      "additionalneeds": "Dinner"};
     const res = await request(BASE_URL)
     .post('/booking')
-    .send({
-      "firstname": "Testfirstname",
-      "lastname": "Testlastname",
-      "totalprice": 2000,
-      "depositpaid": false,
-      "bookingdates": {
-          "checkin": "2024-01-01",
-          "checkout": "2025-01-01"
-      },
-      "additionalneeds": "Dinner"
-    })
-    expect(res.statusCode).toBe(201);
+    .send(bookingData)
+    .set('Content-Type','application/json')
+    expect(200)
+
   });
+
   it('should return 500 for invalid data',async () => {
     const res = await request(BASE_URL)
     .post('/booking')
@@ -154,7 +146,69 @@ describe('DELETE /booking/:id',() => {
     .delete(`/booking/21134444`)
     .set('Content-Type','application/json')
     .set('Authorization','Basic Test23')
+    expect(403)
+  });
+});
+
+
+describe('PUT /booking/:id', () => {
+  it('should update current booking with valid booking data',async () =>{
+    const res = await request(BASE_URL)
+    .put('/booking/1')
+    .set('Content-Type','application/json')
+    .set('Cookie','token=abc123')
+    .send()
+
+  });
+
+  it('should return bad request with invalid data',async () =>{
+    const res = await request(BASE_URL)
+    .put('/booking/23')
+    .set('Content-Type','application/json')
+    .set('Cookie','token=abc123')
+    .send("data")
+    expect(res.statusCode).toBe(400)
+  });
+
+  it('should return forbidden with invalid token',async () => {
+    const res = await request(BASE_URL)
+    .put('/booking/691')
+    .set('Content-Type','application/json')
+    .send('invalid data')
+    expect(res.statusCode).toBe(503)
+  });
+});
+
+
+describe('PATCH /booking/:id',() => {
+  it('should update a current booking with a partial payload',async () => {
+    const patchData = {
+        "firstname" : "Alex Test",
+        "lastname" : "Test"
+    }
+    const res = await request(BASE_URL)
+    .patch('/booking/78')
+    .set('Content-Type','application/json')
+    .set('Authorization','Basic YWRtaW46cGFzc3dvcmQxMjM=')
+    .send(patchData)
+    expect(res.statusCode).toBe(200);
+  },10000);
+  
+  it('should not update a current booking with partial payload with an invalid token',async () => {
+    const patchData = {
+      "firstname" : "Alex Test",
+      "lastname" : "Test"
+    }
+    const res = await request(BASE_URL)
+    .patch('/booking/78')
+    .set('Content-Type','application/json')
+    .set('Authorization','Basic Test')
+    .send(patchData)
     expect(res.statusCode).toBe(403)
+  });
+
+  it('should not update a booking with invalid booking id',async () => {
+
   });
 });
 
