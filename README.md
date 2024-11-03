@@ -21,5 +21,9 @@ Test for Restful-Booker platform using Jest and Supertest.
 ## Results
 - Test results
 
+  ![Screenshot from 2024-11-03 08-45-11](https://github.com/user-attachments/assets/665b87d2-f456-45f1-972d-0be62d818cc0)
+
+  
+
 ## Test Report
 - Generate test report using ``jest-html-reporter``
