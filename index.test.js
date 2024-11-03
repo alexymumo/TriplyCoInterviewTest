@@ -49,7 +49,7 @@ describe('GET /booking', () =>{
     .get('/booking')
     .send();
     expect(res.statusCode).toBe(200);
-  });
+  },10000);
 
   it('should return bookings by firstname and lastname', async () => {
     const res = await request(BASE_URL)
@@ -208,7 +208,16 @@ describe('PATCH /booking/:id',() => {
   });
 
   it('should not update a booking with invalid booking id',async () => {
-
+    const patchData = {
+      "firstname" : "Alex Test",
+      "lastname" : "Test"
+    }
+    const res = await request(BASE_URL)
+    .patch('booking/232T')
+    .set('Content-Type','application/json')
+    .set('Authorization','Basic YWRtaW46cGFzc3dvcmQxMjM=')
+    .send(patchData)
+    expect(res.statusCode).toBe(500)
   });
 });
 
